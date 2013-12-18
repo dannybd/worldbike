@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset='utf-8'> 
+        <title>WorldBike: A Geoguessr Project</title>
+        <link href="main.css" rel="stylesheet" type="text/css" />
+        <link href='http://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    </head>
+<body>
+    <section id="mainbody-container">
+        <section id="mainbody">
+            <section id="geoguessrApp">
+                <section id="mainSection" class="clearfix">
+                    <section id="panorama">
+                    </section>
+                    <section id="resultMapContainer" class="popupMapContainer">
+                        <div id="resultInfo">
+                        </div>
+                        <div id="resultMap" class="popupMap">
+                        </div>
+                    </section>
+                    <section id="endResultMapContainer" class="popupMapContainer">
+                        <div id="endResultInfo" class="clearfix">
+                        </div>
+                        <div class="endResultContainer">
+                        </div>
+                        <div id="endResultMap" class="popupMap">
+                        </div>
+                    </section>
+                    <aside id="roundTimerContainer">
+                    </aside>
+                    <aside id="rightColumnContainer">
+                        <div id="rightcolumn">
+                            <div id="rightColumnContent" class="closed">
+                                <section id="guessMapContainer">
+                                    <section id="guessMap">
+                                    </section>
+                                    <a href="javascript:void(0)" id="makeGuess">Make guess</a>
+                                </section>
+                                <section id="scoreBoard">
+                                </section>
+                                <a href="javascript:void(0)" id="returnToStart">Return to start location</a>
+                            </div>
+							<a href="javascript:void(0)" id="toggleRightColumn"class="closed"></a>
+                        </div>
+                    </aside>
+                </section>
+            </section>
+            <script type="text/template" id="help_template">
+                <div id="helpStepIntro" class="helpStep">
+                    <p>Click anywhere to start playing!</p>
+                </div>
+                <div id="helpStep1" class="helpStep"><h3>1. Look at the area and figure out where you are</h3></div>
+                <div id="helpStep2" class="helpStep"><h3>2. Click the map to place your guess marker<br/>(for your start position)</h3></div>
+                <div id="helpStep3" class="helpStep"><h3>3. Click button to guess</h3></div>
+            </script>
+            <script type="text/template" id="invalid_link_template">
+                <h2>Incorrect link</h2>
+                <p>It seems that the link you provided was incorrect.</p>
+                <p>Close this dialog to continue!</p>
+            </script>
+            <script type="text/template" id="challenge_instructions_template">
+                {% if(isTimedChallenge){ %}
+                    <h2>Time limited challenge accepted!</h2>
+                {% }else{ %}
+                    <h2>Challenge accepted!</h2>
+                {% } %}
+                {% if(isSyncChallenge){ %}
+                    <p>You have accepted a synchronised challenge.
+                    The rules are the same as otherwise and everybody that uses this link to play will use the same location for each round. If you are unsure of how the game works click "help" in the top bar.</p>
+                    <p>After the game is over you can use the share link to compare your scores.</p>
+                {% }else{ %}
+                    <p>You have accepted a challenge to beat another player's score.
+                    The rules are the same as otherwise and you will both be playing the same location for each round. If you are unsure of how the game works click "help" in the top bar.</p>
+                    <p>After each round you will see how the other player did on that round in addition to your own result. Your guess is marked with a 
+                    <span class="red">red</span> marker and the other player's guess is marked with a <span class="blue">blue</span> marker.</p>
+                {% } %}
+                {% if(isTimedChallenge){ %}
+                    <p>This is a timed challenge which means that you have <strong>{%= maxTimePerRound %}</strong> to guess on each round.
+                    The time will not affect your score but when the time is up the screen goes dark and any guess marker that you have placed will be used as your guess. 
+                    Watch out, if no guess marker is placed when the time is up, no points will be awarded.</p> 
+                    <p>The timer starts when you close this dialog or the result map of the previous round.</p>
+                {% } %}
+                {% if(!isSyncChallenge){ %}
+                    <p>The player with the most points after five rounds win!</p>
+                {% } %}
+                <p>Close this dialog to start the challenge!</p>          
+            </script>
+            <script type="text/template" id="create_sync_challenge_template">
+                <h2>Set time limit or create a challenge!</h2>
+                <p>Fill out the form to create a time limited game to play by yourself or compete with your friends. Everybody that uses the game link to play will play the five same locations</p>
+                <p>The time limit will not affect your score but when the time is up, the screen goes dark!</p>
+                <h3>Set time limit (0 = no time limit)</h3>
+                <p><input id="createSyncChallengeTimeMinutes" placeholder="0" /> minutes</p>
+                <p><input id="createSyncChallengeTimeSeconds" placeholder="0" /> seconds</p>
+                <p>
+                    <a id="createSyncChallengeButton" class="syncChallengeButton" href="javascript:void(0)">Create challenge!</a>
+                    <a id="startSyncChallengeButton" class="syncChallengeButton" href="javascript:void(0)">Start challenge!</a>
+                </p>
+                <p id="shareChallengeUrlContainer">
+                    or challenge others with the url: <input class="linkTextBox" id="shareChallengeUrlTextBox" /></p>
+                </p>
+                <script type="text/javascript">
+                    $('.linkTextBox').focus(function() { this.select(); });
+                </script>
+            </script>
+            <script type="text/template" id="round_timer_template">
+                <div id="roundTimerData" {% if(timeIsNearlyUp){ %}class="timeIsNearlyUp"{% } %}>
+                    {%= minutes %}:{%= seconds %}         
+                </div>
+            </script>
+            <script type="text/template" id="panorama_template">
+            </script>
+            <script type="text/template" id="map_template">
+            </script>
+            <script type="text/template" id="resultMap_template">
+                {% if(errorDistance != null){ %}
+                    <h2>Your guess was <strong>{%= errorDistance %} km</strong> from the correct location and gave <strong>{%= points %} points</strong>.</h2>
+                {% }else{ %}
+                    <h2>The time limit was exceeded before you made a guess which gave <strong>{%= points %} points</strong>.</h2>
+                {% } %}
+                {% if(challengeErrorDistance != null){ %}
+                    <p>The challenging guess was <strong>{%= challengeErrorDistance %} km</strong> from the correct location and gave <strong>{%= challengePoints %} points</strong></p>
+                {% } %}
+            </script>
+            <script type="text/template" id="endResultMap_template">
+                {% if(containsShareObject){ %}
+                    <div class="endResultHeader">
+                        {% if(containsChallengeObject){ %}
+                            {% if(isTimedChallenge){ %}
+                                <h2>Showing timed challenge game results ({%= maxTimePerRound %} per round)</h2>
+                            {% }else{ %}
+                                <h2>Showing challenge game results</h2>
+                            {% } %}
+                            {% if(challengeScore){ %}
+                                {% if(totalPoints > challengeScore){ %}
+                                    <p>The challenged player won the challenge with {%= totalPoints %} points against {%= challengeScore %}.</p>
+                                {% }else if(totalPoints == challengeScore){ %}
+                                    <p>The challenged player tied the challenge with {%= totalPoints %} points against {%= challengeScore %}.</p>
+                                {% }else{ %}
+                                    <p>The challenged player lost the challenge with {%= totalPoints %} points against {%= challengeScore %}.</p>
+                                {% } %}  
+                            {% }else{ %}
+                                <p>This game got {%= totalPoints %} points in total. Send the link below to the competitors to compare the scores for this synchronised challenge.</p>                              
+                            {% } %}
+                        {% }else{ %}
+                            <h2>Showing game results</h2>
+                            <p>This game got {%= totalPoints %} points in total.</p>
+                        {% } %}
+                    </div>
+                    <div class="endResultContainer{% if(containsChallengeObject){ %} noChallenge{% } %}">
+                        <h3 class="endResultTitle">Share this score with the url:</h3>
+                        <a href="javascript:void(0)" class="getShortUrlButton shareUrlButton">click to get share url</a>
+                        <input class="linkTextBox shareUrlTextBox" autofocus type="text" />
+                        {% if(!containsChallengeObject){ %}
+                            <h3>or let others challenge this score with the url:</h3>
+                            <a href="javascript:void(0)" class="getShortUrlButton challengeUrlButton">click to get challenge url</a>
+                            <input class="linkTextBox challengeUrlTextBox" autofocus type="text" />
+                        {% } %}
+                    </div>
+                {% }else{ %}
+                    <div class="endResultHeader">
+                        {% if(containsChallengeObject){ %}
+                            {% if(isTimedChallenge){ %}
+                                <h2>Timed challenge game finished ({%= maxTimePerRound %} per round)</h2>
+                            {% }else{ %}
+                                <h2>Challenge game finished!</h2>
+                            {% } %}
+                            {% if(challengeScore){ %}
+                                {% if(totalPoints > challengeScore){ %}
+                                    <p>You won the challenge with {%= totalPoints %} points against {%= challengeScore %}.</p>
+                                {% }else if(totalPoints == challengeScore){ %}
+                                    <p>You tied the challenge with {%= totalPoints %} points against {%= challengeScore %}.</p>
+                                {% }else{ %}
+                                    <p>You lost the challenge with {%= totalPoints %} points against {%= challengeScore %}.</p>
+                                {% } %}
+                            {% }else{ %}
+                                <p>You got {%= totalPoints %} points in total. Send the link below to your competitors to compare your scores for this synchronised challenge.</p>     
+                            {% } %}
+                        {% }else{ %}
+                            <h2>Game finished!</h2>
+                            <p>You got {%= totalPoints %} points in total.</p>
+                        {% } %}
+                    </div>
+                    <div class="endResultContainer{% if(containsChallengeObject){ %} noChallenge{% } %}">
+                        <h3 class="endResultTitle">Share your score with the url:</h3>
+                        <a href="javascript:void(0)" class="getShortUrlButton shareUrlButton">click to get share url</a>
+                        <input class="linkTextBox shareUrlTextBox" autofocus type="text" />
+                        {% if(!containsChallengeObject){ %}
+                            <h3>or let others challenge your score with the url:</h3>
+                            <a href="javascript:void(0)" class="getShortUrlButton challengeUrlButton">click to get challenge url</a>
+                            <input class="linkTextBox challengeUrlTextBox" autofocus type="text" />
+                        {% } %}
+                    </div>
+                {% } %}
+                <script type="text/javascript">
+                    $('.linkTextBox').focus(function() { this.select(); });
+                </script>
+            </script>
+            <script type="text/template" id="scoreboard_template">
+                <span id="sb_last_points">Last round points: {%= lastRoundPoints %}</span>
+                <span id="sb_points">Total points: {%= totalPoints %}</span>
+                <span id="sb_round">Round: {%= roundNumber %}/{%= totalRounds %}</span>
+            </script>
+        </section>
+    </section>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCqm_gMwyJLLbWH5daO800GlGcop5hKb_s&sensor=false&libraries=geometry" type="text/javascript"></script>
+    <script type="text/javascript" src="changeTemplateSettings.js"></script>
+    <script src="geoguessr_all.js" type="text/javascript"></script>
+</body>
+</html>

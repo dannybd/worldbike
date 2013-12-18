@@ -1,0 +1,932 @@
+﻿/*TEMP COLOR SCHEME (borrowed from http://dribbble.com/shots/818103-App-sketch?list=popular&offset=158)
+light-gray: e5e4e4
+medium bluegreen: 168c99
+orange: e2584b
+dark (black): 101010
+brown: 4a302e
+dark-gray: aeabab
+dark bluegreen: 1a7a85
+light bluegreen: 4f9aa3
+
+*/
+
+
+/*--------------------------*/
+/*---------Defaults---------*/
+/*--------------------------*/
+
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+body
+{
+    background-color: #262626;
+    font-size: 12px;
+    line-height:18px;
+    font-family: 'Open Sans', sans-serif;
+
+
+    color: #EFEFEF;
+    width: 100%;
+    height: 100%;
+}
+
+form, fieldset
+{
+    border-style: none;
+}
+
+/* For modern browsers */
+.clearfix:before, .clearfix:after
+{
+    content: "";
+    display: table;
+}
+
+.clearfix:after
+{
+    clear: both;
+}
+
+/* For IE 6/7 (trigger hasLayout) */
+.clearfix
+{
+    zoom: 1;
+}
+
+.red {
+    color: red;
+}
+
+.blue {
+    color: blue;
+}
+
+/*--------------------------*/
+/*--------Framework---------*/
+/*--------------------------*/
+
+header
+{
+    width: 100%;
+    border-bottom: 5px solid #ffffff;
+    padding-bottom:5px;
+    float: left;
+    clear: both;
+    font-family: 'Open Sans', sans-serif;
+
+
+}
+
+#mainheading-content
+{
+    width: 960px;
+    margin: 0 0 0 20px;
+}
+
+#mainheading-top
+{
+    margin-left: 5px;
+}
+
+#mainheading-top h1
+{
+    color:#e2584b;
+    font-size: 44px;
+    line-height:44px;
+    margin-top: 10px;
+    margin-bottom:5px;
+    float: left;
+    clear: both;
+}
+
+#mainheading-top h1 a,
+#mainheading-top h1 a:hover,
+#mainheading-top h1 a:visited
+{
+    color:#e2584b;
+    text-decoration: none;
+}
+
+#mainheading-top h2
+{
+    float: left;
+    font-size: 18px;
+    line-height:26px;
+    margin-left:5px;
+    padding-top:30px;
+}
+
+#mainbody-container
+{
+    position:absolute;
+    bottom:30px;
+    top:69px;
+    width:100%;
+    border-top: 1px solid #101010;
+    border-bottom: 1px solid #101010;
+    padding:1px 0 1px 0;
+}
+
+#mainbody
+{
+    float: left;
+    clear: both;
+    width: 100%;
+    padding: 0px;
+}
+
+#main h2
+{
+    font-size: 24px;
+    margin-bottom:10px;
+}
+
+footer
+{
+    border-top: 2px solid #fff;
+    background-color:#262626;
+    color:#fff;
+    font-family: 'Open Sans', sans-serif;
+
+
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    z-index:999;
+}
+
+aside#sideMenuContainer 
+{
+    position: absolute;
+    right: 430px;
+    top: 0px;
+    z-index: 999;
+    font-family: 'Open Sans', sans-serif;
+
+
+    font-size: 18px;
+}
+
+aside#sideMenuContainer ul {
+    list-style: none;
+}
+
+aside#sideMenuContainer li
+{
+    float: left;
+    margin-right: 10px;
+    border: solid #EFEFEF 2px;
+    outline: solid #262626 1px;
+    
+    border-top-width: 0;
+}
+
+aside#sideMenuContainer li > a
+{
+    background-color: #262626;
+    color: #EFEFEF;
+    padding: 5px 10px 7px 8px;
+    text-decoration: none;
+    position: relative;
+    display: block;
+}
+
+aside#sideMenuContainer li > a:hover,
+aside#sideMenuContainer li#shareMenuLink:hover a
+{
+    background-color: #363636;
+    padding-top: 8px;
+}
+
+aside#sideMenuContainer #shareButtonContainer 
+{
+    background-color: #363636;
+    padding: 0px 13px 13px 13px;
+    width: 37px;
+    display: none;
+}
+
+aside#sideMenuContainer #shareButtonContainer a 
+{
+    margin-top: 10px;
+}
+
+aside#sideMenuContainer li#shareMenuLink:hover > #shareButtonContainer {
+    display: block;
+}
+
+footer p
+{
+    margin:5px auto 5px 5px;
+    float: left;
+}
+
+footer p a 
+{
+    color: #EFEFEF;
+    text-decoration: none;
+}
+
+footer #twitterFollowContainer 
+{
+    margin: 5px 5px 0 5px;
+    float: right;
+}
+
+/*To achieve full coverage for panorama*/
+html, body, form, #mainbody, #maincontent, #main, #geoguessrApp, #mainSection { height: 100%; }
+
+#mainSection
+{
+    position:relative;
+}
+
+#mainSection #leftcolumn
+{
+    min-height:800px;
+    width:100%;
+    height:100%;
+}
+
+#panorama
+{
+    border: solid 1px 0 1px 0 #606060;
+    width:100%;
+    min-height:100%;
+    height:100%;
+    position:relative;
+    z-index:100;
+}
+
+/*Google maps hacks*/
+
+/*Replace google logo, leading to google map 
+with the location, with another leading to 
+google maps start page*/
+#panorama a
+{
+    display: none !important;
+}
+
+#panoramaLogo 
+{
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    z-index: 999;
+    width: 62px; 
+    height: 24px; 
+    cursor: pointer;
+}
+
+#panoramaLogo img 
+{
+    width: 62px; 
+    height: 24px; 
+}
+
+/*Hide road names*/
+#panorama text
+{
+	display:none;
+}
+
+/*--------------------------*/
+/*-------Right column-------*/
+/*--------------------------*/
+
+#rightColumnContainer
+{
+    position:absolute;
+    top:0px;
+    right:15px;
+    z-index:999;
+    padding-bottom:15px;
+}
+
+#rightcolumn
+{
+    padding:10px;
+    width: 352px;
+    overflow:hidden;
+              
+    border: solid 1px #606060;
+    border-top-width: 0;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+#rightcolumn #rightColumnHiddenHeader {
+    color: #606060;
+    display: block;
+    font-size: 20px;
+    /*font-weight: bold;*/
+    text-decoration: none;
+    padding-left: 50px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-family: 'Open Sans', sans-serif;
+
+
+}
+
+#rightcolumn #toggleRightColumn
+{
+    border-bottom-left-radius: 10px 10px;
+    border-bottom-right-radius: 10px 10px;
+    moz-border-bottom-left-radius: 10px 10px;
+    moz-border-bottom-right-radius: 10px 10px;
+    -webkit-border-bottom-left-radius: 10px 10px;
+    -webkit-border-bottom-right-radius: 10px 10px;
+    
+    width: 100%;
+    left: 0;
+    position: absolute;
+    bottom: 0;
+    height: 20px;
+    background-color: #202020;
+}
+
+#rightcolumn #toggleRightColumn.closed
+{
+    background-color: #101010;
+}
+
+#rightcolumn #toggleRightColumn:hover 
+{
+    background-color: #333;
+}
+
+#rightcolumn #scoreBoard
+{
+    float:left;
+    margin-bottom: 10px;
+    color:#101010;
+    margin-top:15px;
+    font-size:16px;
+    line-height:24px;
+    font-family: 'Open Sans', sans-serif;
+
+
+}
+
+#rightcolumn #scoreBoard > span
+{
+    float:left;
+    clear:both;
+}
+
+#rightcolumn #guessMap
+{
+    border: solid 1px #606060;
+    width: 350px;
+    height: 300px;
+}
+
+/*#rightcolumn #guessMap:hover,
+#rightcolumn #guessMap div:hover 
+{
+    cursor: pointer !important;
+}*/
+
+#rightcolumn a#makeGuess
+{
+    background-color:#aaa;
+    color:#fff;
+    font-family: 'Open Sans', sans-serif;
+
+
+    text-decoration:none;
+    display:inline-block;
+    width:100%;
+    height:30px;
+    margin-top:7px;
+    border: solid 1px #606060;
+    font-size:18px;
+    text-align:center;
+    padding-top:9px;
+}
+
+#rightcolumn a#makeGuess.active
+{
+    background-color:#e2584b;
+}
+
+#rightcolumn a#makeGuess.active:hover
+{
+    background-color:#dd3d2e;
+}
+
+
+/*--------------------------*/
+/*--------Pop up map--------*/
+/*--------------------------*/
+
+.popupMapContainer
+{
+    display:none;
+    border: solid 1px #606060;
+    z-index: 9999;
+    position:relative;
+    background-color:#fff;
+    
+    -moz-border-radius:8px;
+    -webkit-border-radius:8px;
+     padding: 10px;
+     color:#000;
+}
+
+.popupMapContainer h2
+{
+    margin-bottom:0px;
+}
+
+.popupMapContainer p
+{
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.popupMap
+{
+    border: solid 1px #999;
+}
+
+#simplemodal-container .close
+{
+    background-color:black;
+    position:absolute;
+    right:-10px;
+    top:-10px;
+    cursor:pointer;
+    height:29px;
+    width:29px;
+    z-index:10000;
+}
+
+.simplemodal-overlay
+{
+    background-color:#000;
+}
+
+
+/*--------------------------*/
+/*-----End of round map-----*/
+/*--------------------------*/
+
+#resultMapContainer
+{
+    width: 720px;
+    height: 555px;
+}
+
+#resultInfo 
+{
+    margin-bottom: 10px;
+}
+
+#resultInfo h2 
+{
+    font-weight: normal;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#resultMap
+{
+    width: 720px;
+    height: 500px;
+}
+
+
+/*--------------------------*/
+/*------End of game map-----*/
+/*--------------------------*/
+
+#endResultMapContainer
+{
+    width: 1020px;
+    /*height: 735px;*/
+    height: 810px;
+}
+
+#endResultInfo 
+{
+    /*margin-bottom: 5px;*/
+}
+
+#endResultInfo h2 
+{
+    margin-bottom: 5px;
+}
+
+#endResultMap
+{
+    width: 1020px;
+    height: 684px;
+}
+
+.endResultContainer 
+{
+    float: left;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.endResultContainer.noChallenge 
+{
+    margin-bottom: 10px;
+}
+
+.endResultContainer input.linkTextBox 
+{
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 1px;
+    padding: 4px 4px 2px 4px;
+    display: none;
+    width: 140px;
+    height: 16px;
+    border: solid 1px #606060;
+}
+
+.endResultContainer a.getShortUrlButton {
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 1px;
+    padding: 4px;
+    padding-top: 2px;
+    width: 140px;
+    height: 16px;
+    font-size:14px;
+    
+    background-color:#e2584b;
+    color:#fff;
+    font-family: 'Open Sans', sans-serif;
+
+
+    text-decoration:none;
+    display:inline-block;
+    border: solid 1px #606060;
+    text-align:center;
+}
+
+.endResultContainer a.getShortUrlButton:hover
+{
+    background-color:#dd3d2e;
+}
+
+.endResultContainer a.getShortUrlButton.active,
+.endResultContainer a.getShortUrlButton.active:hover
+{
+    color: transparent;
+    background-color: #aaaaaa;
+}
+
+.endResultContainer h3 
+{
+    float: left;
+    margin-top: 5px;
+}
+
+.likeButtons 
+{
+    float: left;
+    /*margin-left: 15px;*/
+    margin-top: 2px;
+    margin-bottom: -5px;
+    min-width: 500px;
+}
+
+
+/*--------------------------*/
+/*-----------Fixes----------*/
+/*--------------------------*/
+#twttrHubFrameSecure,
+#twttrHubFrame 
+{
+    left: -9999px;
+}
+
+
+/*--------------------------*/
+/*--------Help modal--------*/
+/*--------------------------*/
+#helpContainer
+{
+    display:none;
+    z-index: 9999;
+    position:relative;
+    width: 100%;
+
+
+    color: #ffffff;
+}
+
+.helpStep {
+    position: absolute;
+}
+
+#helpStepIntro 
+{
+    right: 45%;
+    top: 400px;
+}
+
+#helpStep1 
+{
+    right: 450px;
+    top: 100px;
+    width: 500px;
+}
+
+#helpStep2
+{
+    right: 80px;
+    top: 150px;
+    width: 250px;
+}
+
+#helpStep3 
+{
+    right: 80px;
+    top: 345px;
+    width: 250px;
+}
+
+.helpStep h2 {   
+    font-family: 'Open Sans', sans-serif;
+
+    font-weight: normal;
+    margin-bottom: 7px;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+.helpStep h3 {   
+    font-family: 'Open Sans', sans-serif;
+
+    font-weight: normal;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+.helpStep p 
+{
+    line-height: 22px;
+}
+
+/*--------------------------*/
+/*----Invalid link modal----*/
+/*--------------------------*/
+#invalidLinkContainer 
+{
+    width: 230px;
+    height: 125px;
+    padding: 15px;
+}
+
+#invalidLinkContainer h2 
+{   
+    font-family: 'Open Sans', sans-serif;
+
+    font-weight: normal;
+    margin-bottom: 7px;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+#invalidLinkContainer p 
+{
+    margin-bottom: 10px;
+}
+
+/*--------------------------------*/
+/*--Challenge instructions modal--*/
+/*--------------------------------*/
+#challengeInstructionsContainer 
+{
+    width: 400px;
+    height:210px;
+    padding: 15px;
+}
+
+#challengeInstructionsContainer h2 
+{   
+    font-family: 'Open Sans', sans-serif;
+
+    font-weight: normal;
+    margin-bottom: 7px;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+#challengeInstructionsContainer p 
+{
+    margin-bottom: 10px;
+    line-height: 19px;
+}
+
+/*--------------------------*/
+/*--Return to start button--*/
+/*--------------------------*/
+a#returnToStart
+{
+    /*background-color:#e2584b;*/
+    background-color: #262626;
+    color:#fff;
+    font-family: 'Open Sans', sans-serif;
+
+    text-decoration:none;
+    display:inline-block;
+    width:100%;
+    height:30px;
+    margin-top:7px;
+    margin-bottom: 2px;
+    border: solid 1px #606060;
+    font-size:18px;
+    text-align:center;
+    padding-top:9px;
+}
+
+#rightcolumn a#returnToStart:hover
+{
+    /*background-color:#dd3d2e;*/
+    background-color: #464646;
+}
+
+/*--------------------------------*/
+/*--Create sync challenge modal---*/
+/*--------------------------------*/
+#createSyncChallengeContainer 
+{
+    width: 410px;
+    height:310px;
+    padding: 15px;
+}
+
+#createSyncChallengeContainer h2 
+{   
+    font-family: 'Open Sans', sans-serif;
+
+    font-weight: normal;
+    margin-bottom: 7px;
+    font-size: 25px;
+    line-height: 37px;
+}
+
+#createSyncChallengeContainer h3
+{
+    margin-bottom: 5px;
+}
+
+#createSyncChallengeContainer p 
+{
+    margin-bottom: 10px;
+    line-height: 19px;
+}
+
+#createSyncChallengeContainer input 
+{
+    /*float: left;
+    margin-left: 10px;*/
+    margin-right: 3px;
+    margin-top: 1px;
+    padding: 4px 4px 2px 4px;
+    width: 20px;
+    height: 16px;
+    border: solid 1px #606060;
+}
+
+#createSyncChallengeContainer a.syncChallengeButton {
+    /*float: left;
+    margin-left: 10px;
+    margin-right: 10px;*/
+    margin-top: 3px;
+    /*padding: 4px;*/
+    padding-top: 9px;
+    width: 400px;
+    height: 30px;
+    font-size:18px;
+    
+    background-color:#e2584b;
+    color:#fff;
+    font-family: 'Open Sans', sans-serif;
+
+    text-decoration:none;
+    display:inline-block;
+    border: solid 1px #606060;
+    text-align:center;
+}
+
+#createSyncChallengeContainer a.syncChallengeButton:hover
+{
+    background-color:#dd3d2e;
+}
+
+#createSyncChallengeContainer a.syncChallengeButton.active,
+#createSyncChallengeContainer a.syncChallengeButton.active:hover
+{
+    color: transparent;
+    background-color: #aaaaaa;
+}
+
+#createSyncChallengeContainer a#startSyncChallengeButton {
+    display: none;
+}
+
+#createSyncChallengeContainer #shareChallengeUrlContainer {
+    display: none;
+}
+
+#createSyncChallengeContainer #shareChallengeUrlContainer #shareChallengeUrlTextBox {
+    width: 140px;
+}
+
+/*--------------------------------*/
+/*-----------Round timer----------*/
+/*--------------------------------*/
+#roundTimerContainer {
+    position:absolute;
+    top:200px;
+    left:10px;
+    z-index:999;
+}
+
+#roundTimerData {
+    min-width: 40px;
+    
+    /*font-family: 'Kaushan Script',cursive;*/
+    
+    font-family: 'Open Sans', sans-serif;
+
+    font-weight: bold;
+    font-size: 22px;
+    
+    /*border: solid #EFEFEF 2px;
+    outline: solid #262626 1px;*/
+    
+    /*border-top-width: 0;*/
+
+    /*background-color: #262626;
+    border: solid 1px #000;
+    color: #ffffff;*/
+
+    background-color: #ffffff;
+    color: #838383;
+    border: solid 1px #606060;
+    
+    /*color: #EFEFEF;*/
+    
+    padding: 10px 10px 10px 10px;
+    text-decoration: none;
+    display: block;
+}
+
+#roundTimerContainer .timeIsNearlyUp {
+    background-color: #dd3d2e;
+    color: #fff;
+    border: solid 1px #606060;
+}
+
+/*--------------------------------*/
+/*--------WorldBike tweaks--------*/
+/*--------------------------------*/
+.gmnoprint
+{
+	opacity:0.6;
+}
+
+#panorama .gmnoprint:nth-child(3),
+#panorama .gmnoscreen + .gmnoprint > .gmnoprint:nth-of-type(2)
+{
+	background-color: red;
+	display: none;
+}
+
+#mainbody-container
+{
+	top:0;
+	bottom:0;
+}
+
+#scoreBoard
+{
+	display: none;
+}
+
+#rightcolumn
+{
+	/* border:0; */
+}
+
+#rightColumnContent
+{
+	margin-top:-120%;
+}
