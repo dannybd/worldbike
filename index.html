@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Worldbike: Ride Around Town</title>
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+var geocoder;
+var myPano;
+var recognition;
+var recognizing = false;
+var final_transcript = '';
+
+function initialize() {
+  geocoder = new google.maps.Geocoder();
+  var eastCampus = new google.maps.LatLng(42.3596, -71.0878);
+  var panoramaOptions = {
+    position: eastCampus,
+    zoom: 1
+  };
+  myPano = new google.maps.StreetViewPanorama(
+      document.getElementById('map-canvas'),
+      panoramaOptions);
+  myPano.setPov(myPano.getPhotographerPov());
+  myPano.setVisible(true);
+  
+  if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onstart = function() { 
+      recognizing = true;
+      final_transcript = '';
+    };
+    recognition.onresult = function(event) {
+      var interim_transcript = '';
+
+      for (var i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          final_transcript += event.results[i][0].transcript || '';
+        } else {
+          interim_transcript += event.results[i][0].transcript || '';
+        }
+      }
+      
+      console.log(final_transcript + ' [' + interim_transcript + ']');
+    };
+    recognition.onerror = function(event) { return; };
+    recognition.onend = function() { 
+      recognizing = false;
+      newAddress(final_transcript);
+    };
+  }
+}
+
+function newPosition(LatLng) {
+  myPano.setPosition(LatLng);
+  myPano.setPov(myPano.getPhotographerPov());
+}
+
+function newAddress(address) {
+  if (address == 'random') {
+    // run geoguessr here
+    return;
+  }
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status == google.maps.GeocoderStatus.OK) {
+      newPosition(results[0].geometry.location);
+    } else {
+      console.log(
+        'Geocode was not successful for the following reason: ' + status
+      );
+    }
+  });
+}
+
+function toggleRecognition() {
+  recognizing ? recognition.stop() : recognition.start();
+  return recognizing;
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+  </head>
+  <body>
+    <div id="map-canvas"></div>
+  </body>
+</html>
