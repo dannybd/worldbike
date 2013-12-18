@@ -17,4 +17,5 @@ address with their voice.
 Together, the user is able to mount the bike, and press a button to begin
 voice recognition. The user speaks an address, which is geocoded to LatLong
 coordinates. When the user stops speaking, the map repositions at the address
-specified.
+specified, and the user's motion on the bike allows them to ride around their
+destination of choice.
