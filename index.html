@@ -82,6 +82,10 @@ function newAddress(address) {
   });
 }
 
+function retryAddress() {
+  newAddress(final_transcript);
+}
+
 function toggleRecognition() {
   recognizing ? recognition.stop() : recognition.start();
   return recognizing;
