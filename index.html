@@ -5,9 +5,23 @@
     <title>Worldbike: Ride Around Town</title>
     <style>
       html, body, #map-canvas {
+        font-family: "Helvetica Neue", "Verdana", "Arial", sans-serif;
         height: 100%;
         margin: 0px;
-        padding: 0px
+        padding: 0px;
+      }
+      #entry-field {
+        background-color: rgba(240, 240, 240, 0.8);
+        border: rgba(200, 200, 200, 0.7) 2px;
+        border-radius: 15px;
+        display: none;
+        font-size: 16pt;
+        height: 380px;
+        left: calc(50% - 300px);
+        padding: 10px;
+        position: fixed;
+        top: calc(50% - 200px);
+        width: 580px;
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
@@ -17,6 +31,7 @@ var myPano;
 var recognition;
 var recognizing = false;
 var final_transcript = '';
+var entry;
 
 function initialize() {
   geocoder = new google.maps.Geocoder();
@@ -37,6 +52,7 @@ function initialize() {
     recognition.interimResults = true;
 
     recognition.onstart = function() { 
+      console.log("Beginning voice recognition. Speak now.");
       recognizing = true;
       final_transcript = '';
     };
@@ -51,22 +67,41 @@ function initialize() {
         }
       }
       
-      console.log(final_transcript + ' [' + interim_transcript + ']');
+      var transcript = final_transcript + ' [' + interim_transcript + ']';
+      entry.value = transcript;
     };
     recognition.onerror = function(event) { return; };
     recognition.onend = function() { 
+      console.log("Ending voice recognition. Searching...");
       recognizing = false;
-      newAddress(final_transcript);
     };
   }
+  
+  entry = document.getElementById('entry-field');
+  entry.onblur = hideEntry;
+  entry.onkeyup = function(e) {
+    if (e.which == 13) {
+      entry.blur();
+    }
+  };
+  showEntry();
+  
+  document.body.onkeyup = function(e) {
+    if (!entry.visible && e.which == 32) {
+      showEntry();
+    }
+    
+  };
 }
 
 function newPosition(LatLng) {
+  console.log("Moving address to", LatLng.toString());
   myPano.setPosition(LatLng);
   myPano.setPov(myPano.getPhotographerPov());
 }
 
 function newAddress(address) {
+  console.log("Attempting to find an address out of the string:", address);
   if (address == 'random') {
     // run geoguessr here
     return;
@@ -83,12 +118,31 @@ function newAddress(address) {
 }
 
 function retryAddress() {
-  newAddress(final_transcript);
+  newAddress(entry.value);
 }
 
 function toggleRecognition() {
   recognizing ? recognition.stop() : recognition.start();
-  return recognizing;
+}
+
+function showEntry() {
+  entry.value = '';
+  entry.style.display = 'block';
+  entry.visible = true;
+  entry.focus();
+  recognition.start();
+}
+
+function hideEntry() {
+  entry.style.display = 'none';
+  entry.visible = false;
+  recognition.stop();
+  newAddress(entry.value);
+  focusMap();
+}
+
+function focusMap() {
+  document.getElementsByClassName('gmnoprint')[0].click();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -96,5 +150,6 @@ google.maps.event.addDomListener(window, 'load', initialize);
   </head>
   <body>
     <div id="map-canvas"></div>
+    <textarea id="entry-field" autofucus></textarea>
   </body>
 </html>
