@@ -19,3 +19,7 @@ voice recognition. The user speaks an address, which is geocoded to LatLong
 coordinates. When the user stops speaking, the map repositions at the address
 specified, and the user's motion on the bike allows them to ride around their
 destination of choice.
+
+======
+
+You can view a live demo [here](http://dbd.mit.edu/worldbike/).
