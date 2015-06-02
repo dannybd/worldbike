@@ -52,13 +52,13 @@ function initialize() {
       panoramaOptions);
   myPano.setPov(myPano.getPhotographerPov());
   myPano.setVisible(true);
-  
+
   if ('webkitSpeechRecognition' in window) {
     recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
 
-    recognition.onstart = function() { 
+    recognition.onstart = function() {
       console.log("Beginning voice recognition. Speak now.");
       recognizing = true;
       final_transcript = '';
@@ -76,17 +76,17 @@ function initialize() {
           interim_transcript += event.results[i][0].transcript || '';
         }
       }
-      
+
       var transcript = final_transcript + ' [' + interim_transcript + ']';
       entry.value = transcript;
     };
     recognition.onerror = function(event) { return; };
-    recognition.onend = function() { 
+    recognition.onend = function() {
       console.log("Ending voice recognition.");
       recognizing = false;
     };
   }
-  
+
   entry = document.getElementById('entry-field');
   entry.onblur = hideEntry;
   entry.onkeyup = function(e) {
@@ -96,12 +96,12 @@ function initialize() {
     recognition.stop();
   };
   showEntry();
-  
+
   document.body.onkeyup = function(e) {
     if (!entry.visible && ~[Keys.ENTER, Keys.SPACE].indexOf(e.which)) {
       !entry.visible && showEntry();
     }
-    
+
   };
 }
 
@@ -163,9 +163,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
   </head>
   <body>
     <div id="map-canvas"></div>
-    <textarea 
-      id="entry-field" 
-      autofucus 
+    <textarea
+      id="entry-field"
+      autofucus
       placeholder="Begin speaking your destination's address.
       Press [ENTER] to bring up this box and to teleport."
     ></textarea>

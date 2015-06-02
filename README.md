@@ -5,7 +5,7 @@ Street View to allow users to bike around their destinations of choice.
 
 The plan is to combine several technologies:
 
-- A MakeyMakey board attached to an exercise bike, to provide inputs from the 
+- A MakeyMakey board attached to an exercise bike, to provide inputs from the
 bike. The board allows closed circuits to act as keystrokes on a laptop.
 
 - A full-screen Google Maps JavaScript API v3 Street View container, which is
